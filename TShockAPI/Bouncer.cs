@@ -1819,10 +1819,9 @@ namespace TShockAPI
 			int type = args.Type;
 			int time = args.Time;
 
-			void Reject(string reason, bool shouldResync = true)
+
+			void Reject(bool shouldResync = true)
 			{
-				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: {5}",
-					args.Player.Name, args.Player.Index, type, id, time, reason));
 				args.Handled = true;
 
 				if (shouldResync)
@@ -1831,31 +1830,49 @@ namespace TShockAPI
 
 			if (id >= Main.maxPlayers)
 			{
-				Reject(GetString("Target ID is over player capacity"), false);
+				TShock.Log.ConsoleDebug(GetString(
+					"Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: target ID out of bounds",
+					args.Player.Name, args.Player.Index, type, id, time));
+				Reject(false);
 				return;
 			}
 
 			if (TShock.Players[id] == null)
 			{
-				Reject(GetString("Target is null"), false);
+				TShock.Log.ConsoleDebug(GetString(
+					"Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: target is null", args.Player.Name,
+					args.Player.Index, type, id, time));
+				Reject(false);
 				return;
 			}
 
 			if (type >= Terraria.ID.BuffID.Count)
 			{
-				Reject(GetString("Invalid buff type"), false);
+
+				TShock.Log.ConsoleDebug(GetString(
+					"Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: invalid buff type", args.Player.Name,
+					args.Player.Index, type, id, time));
+				Reject(false);
 				return;
 			}
 
 			if (args.Player.IsBeingDisabled())
 			{
-				Reject(GetString("Sender is being disabled"));
+
+				TShock.Log.ConsoleDebug(GetString(
+					"Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: sender is being disabled",
+					args.Player.Name, args.Player.Index, type, id, time));
+				Reject();
+
 				return;
 			}
 
 			if (args.Player.IsBouncerThrottled())
 			{
-				Reject(GetString("Sender is being throttled"));
+				TShock.Log.ConsoleDebug(GetString(
+					"Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: sender is being throttled",
+					args.Player.Name, args.Player.Index, type, id, time));
+				Reject();
 				return;
 			}
 
@@ -1864,31 +1881,47 @@ namespace TShockAPI
 
 			if (!args.Player.IsInRange(targetPlayer.TileX, targetPlayer.TileY, 50))
 			{
-				Reject(GetString("Sender is not in range of target"));
+				TShock.Log.ConsoleDebug(GetString(
+					"Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: sender is not in range of target",
+					args.Player.Name, args.Player.Index, type, id, time));
+				Reject();
 				return;
 			}
 
 			if (buffLimit == null)
 			{
-				Reject(GetString("Buff is not whitelisted"));
+
+				TShock.Log.ConsoleDebug(GetString(
+					"Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: buff is not whitelisted",
+					args.Player.Name, args.Player.Index, type, id, time));
+				Reject();
 				return;
 			}
 
 			if (buffLimit.CanOnlyBeAppliedToSender && id != args.Player.Index)
 			{
-				Reject(GetString("Buff cannot be applied to non-senders"));
+				TShock.Log.ConsoleDebug(GetString(
+					"Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: buff cannot be applied to non-senders",
+					args.Player.Name, args.Player.Index, type, id, time));
+				Reject();
 				return;
 			}
 
 			if (!buffLimit.CanBeAddedWithoutHostile && !targetPlayer.TPlayer.hostile)
 			{
-				Reject(GetString("Buff cannot be applied without PvP"));
+				TShock.Log.ConsoleDebug(GetString(
+					"Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: buff cannot be applied without pvp",
+					args.Player.Name, args.Player.Index, type, id, time));
+				Reject();
 				return;
 			}
 
 			if (time <= 0 || time > buffLimit.MaxTicks)
 			{
-				Reject(GetString("Buff cannot be applied for that long"));
+				TShock.Log.ConsoleDebug(GetString(
+					"Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: buff cannot be applied for that long",
+					args.Player.Name, args.Player.Index, type, id, time));
+				Reject();
 				return;
 			}
 		}

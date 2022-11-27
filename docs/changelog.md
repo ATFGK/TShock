@@ -80,11 +80,14 @@ Use past tense when adding new entries; sign your name off when you add or chang
 
 ## Upcoming changes
 
+
 * Allowed Digging Molecart and bomb fish to break tiles and place tracks (@sgkoishi)
+
+* Updated the Utils.FindByIdOrName to follow same logic. Now fuzzy match fallback to `StartsWith` and then `Contains`. (@sgkoishi)
 * Added `ShadowCandle` and `BrainOfConfusionBuff` (BoC dodge buff) to the `PlayerAddBuffWhitelist` (@drunderscore)
 * Improved rejection message and code duplication in `OnPlayerBuff` (@drunderscore)
-* This will make it so Bouncer rejections regarding `PlayerAddBuff` will now always include the sender index, buff type, receiver index, and time in ticks, allowing much faster triage of buff whitelist issues.
-
+  * This will make it so Bouncer rejections regarding `PlayerAddBuff` will now always include the sender index, buff type, receiver index, and time in ticks, allowing much faster triage of buff whitelist issues.
+  
 * An additional option `pvpwithnoteam` is added at `PvPMode` to enable PVP with no team.(@CelestialAnarchy, #2617, @ATFGK)
 * Fixed wrong MaxProjDamage trigger.(@ATFGK, #2804)
 * Fixed incorrect Spawn information.(@ATFGK, #2804)
