@@ -1,7 +1,12 @@
 # TShock for Terraria
 
 This is the rolling changelog for TShock for Terraria. Changes listed under "upcoming changes" are only available in experimental builds.
+
+
+cs
+cs2
 cscs1
+
 <!-- ## How to add a changelog entry
 ATTENTION MORTALS
 PLEASE READ ALL OF THE INSTRUCTIONS HERE
