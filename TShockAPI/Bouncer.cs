@@ -416,18 +416,6 @@ namespace TShockAPI
 				CanBeAddedWithoutHostile = false,
 				CanOnlyBeAppliedToSender = false
 			};
-			PlayerAddBuffWhitelist[BuffID.ShadowCandle] = new BuffLimit
-			{
-				MaxTicks = 2,
-				CanBeAddedWithoutHostile = true,
-				CanOnlyBeAppliedToSender = true
-			};
-			PlayerAddBuffWhitelist[BuffID.BrainOfConfusionBuff] = new BuffLimit
-			{
-				MaxTicks = 240,
-				CanBeAddedWithoutHostile = true,
-				CanOnlyBeAppliedToSender = true
-			};
 
 			#endregion Whitelist
 		}
@@ -1819,43 +1807,41 @@ namespace TShockAPI
 			int type = args.Type;
 			int time = args.Time;
 
-			void Reject(string reason, bool shouldResync = true)
-			{
-				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected {0} ({1}) applying buff {2} to {3} for {4} ticks: {5}",
-					args.Player.Name, args.Player.Index, type, id, time, reason));
-				args.Handled = true;
-
-				if (shouldResync)
-					args.Player.SendData(PacketTypes.PlayerBuff, number: id);
-			}
-
 			if (id >= Main.maxPlayers)
 			{
-				Reject(GetString("Target ID is over player capacity"), false);
+				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected player cap from {0}", args.Player.Name));
+				args.Handled = true;
 				return;
 			}
 
 			if (TShock.Players[id] == null)
 			{
-				Reject(GetString("Target is null"), false);
+				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected null check from {0}", args.Player.Name));
+				args.Handled = true;
 				return;
 			}
 
 			if (type >= Terraria.ID.BuffID.Count)
 			{
-				Reject(GetString("Invalid buff type"), false);
+				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected invalid buff type {0}", args.Player.Name));
+				args.Player.SendData(PacketTypes.PlayerBuff, "", id);
+				args.Handled = true;
 				return;
 			}
 
 			if (args.Player.IsBeingDisabled())
 			{
-				Reject(GetString("Sender is being disabled"));
+				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected disabled from {0}", args.Player.Name));
+				args.Player.SendData(PacketTypes.PlayerBuff, "", id);
+				args.Handled = true;
 				return;
 			}
 
 			if (args.Player.IsBouncerThrottled())
 			{
-				Reject(GetString("Sender is being throttled"));
+				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected throttled from {0}", args.Player.Name));
+				args.Player.SendData(PacketTypes.PlayerBuff, "", id);
+				args.Handled = true;
 				return;
 			}
 
@@ -1864,31 +1850,41 @@ namespace TShockAPI
 
 			if (!args.Player.IsInRange(targetPlayer.TileX, targetPlayer.TileY, 50))
 			{
-				Reject(GetString("Sender is not in range of target"));
+				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected range check from {0}", args.Player.Name));
+				args.Player.SendData(PacketTypes.PlayerBuff, "", id);
+				args.Handled = true;
 				return;
 			}
 
 			if (buffLimit == null)
 			{
-				Reject(GetString("Buff is not whitelisted"));
+				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected non-whitelisted buff {0}", args.Player.Name));
+				args.Player.SendData(PacketTypes.PlayerBuff, "", id);
+				args.Handled = true;
 				return;
 			}
 
 			if (buffLimit.CanOnlyBeAppliedToSender && id != args.Player.Index)
 			{
-				Reject(GetString("Buff cannot be applied to non-senders"));
+				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected applied to non-sender from {0}", args.Player.Name));
+				args.Player.SendData(PacketTypes.PlayerBuff, "", id);
+				args.Handled = true;
 				return;
 			}
 
 			if (!buffLimit.CanBeAddedWithoutHostile && !targetPlayer.TPlayer.hostile)
 			{
-				Reject(GetString("Buff cannot be applied without PvP"));
+				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected hostile/pvp from {0}", args.Player.Name));
+				args.Player.SendData(PacketTypes.PlayerBuff, "", id);
+				args.Handled = true;
 				return;
 			}
 
 			if (time <= 0 || time > buffLimit.MaxTicks)
 			{
-				Reject(GetString("Buff cannot be applied for that long"));
+				TShock.Log.ConsoleDebug(GetString("Bouncer / OnPlayerBuff rejected time too long from {0}", args.Player.Name));
+				args.Player.SendData(PacketTypes.PlayerBuff, "", id);
+				args.Handled = true;
 				return;
 			}
 		}
