@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -34,8 +34,6 @@ namespace TShockAPI.Localization
 		private static readonly Dictionary<int, string> NpcNames = new Dictionary<int, string>();
 
 		private static readonly Dictionary<int, string> Prefixs = new Dictionary<int, string>();
-
-		private static readonly Dictionary<int, string> Buffs = new Dictionary<int, string>();
 
 		internal static void Initialize()
 		{
@@ -60,16 +58,10 @@ namespace TShockAPI.Localization
 					NpcNames.Add(i, Lang.GetNPCNameValue(i));
 				}
 
-				for (var i = 0; i < Terraria.ID.BuffID.Count; i++)
-				{
-					Buffs.Add(i, Lang.GetBuffName(i));
-				}
-
 				foreach (var field in typeof(Main).Assembly.GetType("Terraria.ID.PrefixID")
 							.GetFields().Where(f => !f.Name.Equals("Count", StringComparison.Ordinal)))
 				{
-					var i = (int)field.GetValue(null);
-					Prefixs.Add(i, Lang.prefix[i].Value);
+					Prefixs.Add((int) field.GetValue(null), field.Name);
 				}
 			}
 			finally
@@ -119,20 +111,6 @@ namespace TShockAPI.Localization
 			string prefix;
 			if (Prefixs.TryGetValue(id, out prefix))
 				return prefix;
-
-			return null;
-		}
-
-		/// <summary>
-		/// Get buff name in English
-		/// </summary>
-		/// <param name="id">Buff Id</param>
-		/// <returns>Buff name in English</returns>
-		public static string GetBuffNameById(int id)
-		{
-			string buff;
-			if (Buffs.TryGetValue(id, out buff))
-				return buff;
 
 			return null;
 		}
