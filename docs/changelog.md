@@ -80,6 +80,7 @@ Use past tense when adding new entries; sign your name off when you add or chang
 ## Upcoming changes
 
 
+* An additional option `pvpwithnoteam` is added at `PvPMode` to enable PVP with no team.(@CelestialAnarchy, #2617, @ATFGK)
 * Fixed wrong MaxProjDamage trigger.(@ATFGK, #2804)
 * Fixed incorrect Spawn information.(@ATFGK, #2804)
 * New argument `AI[2]` has been added to hook `GetDataHandlers.HandleProjectileNew`.(@ATFGK)
@@ -91,6 +92,7 @@ Use past tense when adding new entries; sign your name off when you add or chang
 * New argument `numberOfDeathsPVE` and `numberOfDeathsPVP` have been added to hook `GetDataHandlers.OnPlayerSpawn`.(@ATFGK)
 * New argument `numberOfDeathsPVE` and `numberOfDeathsPVP` have been added to `TSPlayer.Spawn`.(@ATFGK)
 * An argument `npcIndex` in `GetDataHandlers.HandleNpcTeleportPortal` has been updated to `ushort`.(@ATFGK)
+
 * Added `WorldTileProvider` to the tshock config with values `default`, `constileation` or `heaptile`. This allows tile providers to be changed in environments where CLI args cannot be altered. See the documentation website for more info about these providers. (@SignatureBeef)
 * Updated the Utils.FindByIdOrName to follow same logic. Now fuzzy match fallback to `StartsWith` and then `Contains`. (@sgkoishi)
 * Added `ShadowCandle` and `BrainOfConfusionBuff` (BoC dodge buff) to the `PlayerAddBuffWhitelist` (@drunderscore)
