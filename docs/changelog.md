@@ -4,9 +4,7 @@ This is the rolling changelog for TShock for Terraria. Changes listed under "upc
 
 
 cs22222222222
-cs
-cs1111111111
-cscs1
+
 
 <!-- ## How to add a changelog entry
 ATTENTION MORTALS
