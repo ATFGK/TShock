@@ -4,7 +4,8 @@ This is the rolling changelog for TShock for Terraria. Changes listed under "upc
 
 
 66666
-
+777
+7777777777
 
 <!-- ## How to add a changelog entry
 ATTENTION MORTALS
