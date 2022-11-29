@@ -3,9 +3,9 @@
 This is the rolling changelog for TShock for Terraria. Changes listed under "upcoming changes" are only available in experimental builds.
 
 
-66666
-777
-7777777777
+666660
+7770
+77777777770
 
 <!-- ## How to add a changelog entry
 ATTENTION MORTALS
