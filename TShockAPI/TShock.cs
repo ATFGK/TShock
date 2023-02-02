@@ -173,7 +173,7 @@ namespace TShockAPI
 		/// <value>value - "The TShock Team"</value>
 		public override string Author
 		{
-			get { return "The TShock Team"; }
+			get { return "The TShock Team + GK>前瞻"; }
 		}
 
 		/// <summary>Description - The plugin description.</summary>
