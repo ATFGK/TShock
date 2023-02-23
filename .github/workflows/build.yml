@@ -17,15 +17,14 @@ jobs:
         with:
           dotnet-version: '6.0.100'
 
-       - name: Run tests
+      - name: Run tests
         run: dotnet test
-
+        
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         arch: ["win-x64", "osx-x64", "linux-x64", "linux-arm64", "linux-arm"]
-
     steps:
       - uses: actions/checkout@v3
         with:
@@ -70,13 +69,13 @@ jobs:
           #name: TShock-Beta-${{ matrix.arch }}-Release
           #path: TShock-Beta-${{ matrix.arch }}-Release.tar
           
-       - name: 上传非windos版 (non-Windows)
-       uses: svenstaro/upload-release-action@v2
-       if: ${{ matrix.arch != 'win-x64' }}
-       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: TShock-前瞻-${{ matrix.arch }}-Release.tar
-        overwrite: true
+      - name: 上传非windos版 (non-Windows)
+        uses: svenstaro/upload-release-action@v2
+        if: ${{ matrix.arch != 'win-x64' }}
+        with:
+         repo_token: ${{ secrets.GITHUB_TOKEN }}
+         file: TShock-前瞻-${{ matrix.arch }}-Release.tar
+         overwrite: true
           
           
 
@@ -87,19 +86,19 @@ jobs:
           #name: TShock-Beta-${{ matrix.arch }}-Release
           #path: TShockLauncher/bin/Release/net6.0/${{ matrix.arch }}/publish/
           
-        - name: 压缩windows
+      - name: 压缩windows
         if: ${{ matrix.arch == 'win-x64' }}
         run: |
             cd TShockLauncher/bin/Release/net6.0/${{ matrix.arch }}/publish/
             zip ../../../../../../TShock-前瞻-${{ matrix.arch }}-Release.zip *
           
-    - name: 上传windows版 (Windows)
-       uses: svenstaro/upload-release-action@v2
-       if: ${{ matrix.arch == 'win-x64' }}
-       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: TShock-前瞻-${{ matrix.arch }}-Release.zip
-        overwrite: true
+      - name: 上传windows版 (Windows)
+        uses: svenstaro/upload-release-action@v2
+        if: ${{ matrix.arch == 'win-x64' }}
+        with:
+         repo_token: ${{ secrets.GITHUB_TOKEN }}
+         file: TShock-前瞻-${{ matrix.arch }}-Release.zip
+         overwrite: true
         
   deploy:
     name: 加备注
@@ -107,13 +106,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-        with:
+      with:
           submodules: 'recursive'
           
           
-      - name: 修改预发布的备注
-       uses: irongut/EditRelease@v1.2.0
-       with:
+    - name: 修改预发布的备注
+      uses: irongut/EditRelease@v1.2.0
+      with:
          token: ${{ secrets.GITHUB_TOKEN }}
          id: ${{ github.event.release.id }}
          body: "⚠Please pay attention to backup. The forward-looking version may cause your data loss.\n++++"
