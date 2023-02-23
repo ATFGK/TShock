@@ -1,9 +1,8 @@
 name: Build + Deploy
 on: 
   release:
-    types: [prereleased]
-    branches: [prospect] #限制只有前瞻版
-    
+    types: [prereleased]#限制只有前瞻版
+
 jobs:
   test:
     runs-on: windows-latest
